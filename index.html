@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; img-src data: blob:; connect-src https://script.google.com https://*.googleusercontent.com; base-uri 'none'; form-action 'none'"><meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Camp Split</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+--bg:#eef5ee;--card:#fff;--ink:#17301f;--mut:#6b7f70;--acc:#2f8f5b;--acc2:#e9a23b;--line:#dbe7dc;--ok:#2f8f5b;--bad:#d6513f;color-scheme:light}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme]){--bg:#10151c;--card:#1a2230;--ink:#e8eef7;--mut:#8b98ad;--acc:#5b9dff;--acc2:#f5b95c;--line:#2a3547;--ok:#4cc38a;--bad:#ff7a6b;color-scheme:dark}}
+:root[data-theme=forest]{--bg:#eef5ee;--card:#fff;--ink:#17301f;--mut:#6b7f70;--acc:#2f8f5b;--acc2:#e9a23b;--line:#dbe7dc;--ok:#2f8f5b;--bad:#d6513f;color-scheme:light}
+:root[data-theme=ocean]{--bg:#eaf4fb;--card:#fff;--ink:#12303f;--mut:#617b8a;--acc:#1d7fc4;--acc2:#27b9a8;--line:#d3e4ef;--ok:#1f9d7a;--bad:#d9534f;color-scheme:light}
+:root[data-theme=sunset]{--bg:#fff3ea;--card:#fffdfb;--ink:#3a2118;--mut:#8a6d60;--acc:#e0603a;--acc2:#f2a900;--line:#f1ddd0;--ok:#2e9a63;--bad:#c93a3a;color-scheme:light}
+:root[data-theme=lavender]{--bg:#f3effa;--card:#fff;--ink:#2a2140;--mut:#7a6f94;--acc:#7a55d6;--acc2:#e46fa8;--line:#e3dcf2;--ok:#2f9a74;--bad:#d4506a;color-scheme:light}
+:root[data-theme=midnight]{--bg:#10151c;--card:#1a2230;--ink:#e8eef7;--mut:#8b98ad;--acc:#5b9dff;--acc2:#f5b95c;--line:#2a3547;--ok:#4cc38a;--bad:#ff7a6b;color-scheme:dark}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;min-height:100%}
+.wrap{max-width:1040px;margin:0 auto;padding:16px}
+header{display:flex;align-items:center;gap:14px;margin-bottom:16px;flex-wrap:wrap}
+#logo{width:58px;height:58px;border-radius:18px;background:linear-gradient(135deg,var(--acc),var(--acc2));display:grid;place-items:center;font-size:30px;overflow:hidden;flex:none;border:0;cursor:pointer;box-shadow:0 6px 18px #0002}
+#logo img{width:100%;height:100%;object-fit:cover}
+header h1{margin:0;font-size:22px}header p{margin:0;color:var(--mut);font-size:13px}
+.sp{flex:1}
+.themes{display:flex;gap:6px}
+.themes button{width:26px;height:26px;border-radius:50%;border:2px solid var(--card);cursor:pointer;box-shadow:0 0 0 1px var(--line)}
+.themes button.on{box-shadow:0 0 0 2px var(--acc)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:800px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;box-shadow:0 2px 10px #0000000d}
+.card h2{margin:0 0 10px;font-size:16px;display:flex;align-items:center;gap:8px}
+.full{grid-column:1/-1}
+label{display:block;font-size:12px;color:var(--mut);margin:8px 0 3px}
+input,select{width:100%;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font:inherit}
+input:focus,select:focus{outline:2px solid var(--acc);outline-offset:0}
+.row{display:flex;gap:8px;flex-wrap:wrap}.row>*{flex:1;min-width:110px}
+.btn{background:var(--acc);color:#fff;border:0;border-radius:12px;padding:10px 16px;font:inherit;font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.sm{padding:5px 10px;font-size:13px;border-radius:9px}
+.fb{min-height:18px;font-size:13px;margin-top:6px}.fb.err{color:var(--bad)}.fb.ok{color:var(--ok)}
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--bg);border:1px solid var(--line);border-radius:999px;padding:5px 6px 5px 12px;margin:3px 4px 3px 0}
+.chip.car{border-color:var(--acc2)}
+.chip button{border:0;background:none;color:var(--mut);cursor:pointer;font-size:15px;padding:0 4px}
+.item{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.item:last-child{border:0}.item .m{flex:1;min-width:0}.item small{color:var(--mut);display:block}
+.amt{font-weight:700;white-space:nowrap}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.stat{background:var(--bg);border-radius:14px;padding:12px}.stat b{display:block;font-size:20px}.stat span{font-size:12px;color:var(--mut)}
+.pos{color:var(--ok)}.neg{color:var(--bad)}
+table{width:100%;border-collapse:collapse;font-size:14px}th{font-size:12px;color:var(--mut);text-align:right;font-weight:600;padding:6px}td{padding:9px 6px;text-align:right;border-top:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+.tbl{overflow-x:auto}
+.xfer{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--bg);border-radius:12px;margin:6px 0;flex-wrap:wrap}
+.xfer .m{flex:1;min-width:140px}
+.checks{display:flex;flex-wrap:wrap;gap:6px}.checks label{margin:0;display:flex;align-items:center;gap:5px;background:var(--bg);padding:5px 10px;border-radius:999px;color:var(--ink);font-size:13px}
+.checks input{width:auto}
+.ro .adm{display:none!important}.tv .wrap{zoom:1.35}.badge{background:var(--acc2);color:#000;border-radius:999px;padding:2px 10px;font-size:12px;margin-left:6px;font-weight:600}
+.empty{color:var(--mut);padding:8px 0;font-size:14px}
+#lock{position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;place-items:center;padding:20px}#lock[hidden]{display:none}
+.lbox{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px;width:100%;max-width:340px;text-align:center;box-shadow:0 10px 30px #0003}.lbox h2{margin:8px 0 14px}.lbox input,.lbox .btn{margin-bottom:10px;text-align:center}.lbox .btn{width:100%}
+.grid>*,.item .m,header>div{min-width:0}
+.card,.item b,.item small,header h1{overflow-wrap:anywhere}
+.chip{max-width:100%}.tbl{-webkit-overflow-scrolling:touch}
+@media(max-width:600px){
+.wrap{padding:12px max(12px,env(safe-area-inset-right)) 12px max(12px,env(safe-area-inset-left))}
+header{gap:10px}header h1{font-size:19px}#logo{width:50px;height:50px;font-size:26px;border-radius:15px}
+header>.sp{flex-basis:100%;height:0}.themes{flex-wrap:wrap}
+.card{padding:13px;border-radius:16px}
+.row>*{min-width:min(110px,100%)}
+.item{flex-wrap:wrap;gap:8px}.item .m{flex:1 1 150px}
+.stats{grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}.stat b{font-size:18px}
+table{font-size:13px}th,td{padding:7px 4px}
+input,select{font-size:16px}
+.xfer .m{flex-basis:100%}
+.badge{display:inline-block;margin:4px 0 0}
+}
+</style></head><body><div id="lock" hidden><div class="lbox"><div style="font-size:38px">🔒</div><h2 id="lk-t">Enter PIN</h2><input id="lk-pin" type="password" inputmode="numeric" autocomplete="off" placeholder="PIN"><input id="lk-pin2" type="password" inputmode="numeric" autocomplete="off" placeholder="Repeat PIN" hidden><button class="btn" id="lk-go">Unlock</button><button class="btn ghost" id="lk-x" hidden>Cancel</button><div class="fb" id="fb-lk"></div></div></div>
+<div class="wrap">
+<header>
+ <button id="logo" title="Edit logo" aria-label="Edit logo"></button>
+ <div><h1 id="tname">Camp Split</h1><p>Fair shares for every weekend away <span id="badge" class="badge" hidden>👁 View only · live</span></p></div>
+ <div class="sp"></div><div class="themes" id="themes"></div><button class="btn ghost sm" id="lockbtn" title="Set a PIN">🔓</button><button class="btn ghost sm" id="tvbtn" title="Big screen mode">📺</button>
+</header>
+<div class="grid">
+ <section class="card full" data-sec="settings"><h2>✨ Trip settings</h2>
+  <div class="row"><div><label>Trip name</label><input id="s-name"></div><div><label>Logo emoji</label><input id="s-emoji" maxlength="4"></div><div><label>Currency symbol</label><input id="s-cur" maxlength="3"></div><div><label>Trip start date</label><input id="s-start" type="date"></div><div><label>Cleaning per car</label><input id="s-clean" type="number" min="0" step="0.5"></div></div>
+  <div class="row adm" style="margin-top:10px"><button class="btn ghost sm" id="up">Upload logo image</button><button class="btn ghost sm" id="rmimg">Use emoji logo</button><button class="btn ghost sm" id="exp">Backup data</button><button class="btn ghost sm" id="imp">Restore backup</button><button class="btn ghost sm" id="reset">New trip</button></div>
+  <input type="file" id="f-img" accept="image/*" hidden><input type="file" id="f-imp" accept="application/json" hidden>
+  <div class="fb" id="fb-set"></div></section>
+
+ <section class="card" data-sec="friends"><h2>👥 Friends</h2>
+  <div class="adm"><div class="row"><input id="p-name" placeholder="Friend’s name"><button class="btn" id="p-add" style="flex:none">Add</button></div>
+  <label style="display:flex;gap:8px;align-items:center;color:var(--ink);font-size:14px"><input type="checkbox" id="p-car" style="width:auto"> Took their car (gets the cleaning allowance)</label>
+  <label>Joined on (date)</label><input id="p-date" type="date"></div>
+  <div class="fb" id="fb-p"></div><div id="people"></div></section>
+
+ <section class="card adm"><h2>🧾 Add an expense</h2>
+  <label>What was it?</label><input id="e-desc" placeholder="Food, tent rental, fuel refill…">
+  <div class="row"><div><label>Amount</label><input id="e-amt" type="number" min="0" step="0.01" inputmode="decimal"></div><div><label>Paid by</label><select id="e-by"></select></div></div>
+  <label>Expense date (friends who joined later aren’t charged for earlier dates)</label><input id="e-date" type="date">
+  <label>Category</label><select id="e-cat"><option value="food">🍖 Food</option><option value="rent">⛺ Rentals</option><option value="fuel">⛽ Fuel (refill to full)</option><option value="other">🧩 Other</option></select>
+  <label>Shared between</label><div class="checks" id="e-split"></div>
+  <div class="row" style="margin-top:10px"><button class="btn" id="e-add">Add expense</button><button class="btn ghost" id="e-cancel" hidden>Cancel edit</button></div>
+  <div class="fb" id="fb-e"></div></section>
+
+ <section class="card full" data-sec="barakah"><h2>💰 Barakah (money collected)</h2>
+ <div class="row adm"><div><label>Who paid in</label><select id="c-who"></select></div><div><label>Amount</label><input id="c-amt" type="number" min="0" step="0.01" inputmode="decimal"></div><div><label>Date</label><input id="c-date" type="date"></div><button class="btn" id="c-add" style="flex:none;align-self:end">Add</button></div>
+ <div class="fb" id="fb-c"></div><div class="stats" id="kstats" style="margin-bottom:8px"></div><div id="contribs"></div></section>
+ <section class="card full" data-sec="expenses"><h2>📋 Expenses</h2><div id="exps"></div></section>
+
+ <section class="card full" data-sec="summary"><h2>📊 Summary</h2><div class="stats" id="stats"></div>
+  <div class="tbl" style="margin-top:12px"><table id="tbl"></table></div></section>
+
+ <section class="card" data-sec="xfers"><h2>💸 Who pays whom</h2><div id="xfers"></div></section>
+ <section class="card" data-sec="pays"><h2>✅ Already paid back</h2><div id="pays"></div><div class="fb" id="fb-pay"></div></section>
+ <section class="card full adm"><h2>🛟 Keep it safe</h2><div id="bk-msg" class="empty"></div>
+  <div class="row"><button class="btn" id="bk-share">Send backup (WhatsApp, Drive…)</button><button class="btn ghost" id="bk-link">Copy restore link</button></div>
+  <div class="fb" id="fb-bk"></div></section>
+ <section class="card full adm"><h2>🛠 Admin panel</h2>
+  <div class="empty">Create a private view-only link for each friend. They see only the parts you tick, and can change nothing, and they never see this panel, backups or Drive settings. Remove someone to stop their link working. Links open on any device with a web browser: phones, tablets, laptops, smart TVs and Xbox (Edge). For Xbox or a TV, paste the link into tinyurl.com first to get a short link that’s easy to type, and use the 📺 button for big-screen mode.</div>
+  <label>Tick what new links can see (you can change it for each person below at any time)</label><div id="ad-def"></div><div class="row"><input id="ad-name" placeholder="Friend’s name"><button class="btn" id="ad-add" style="flex:none">Create link</button><button class="btn ghost" id="ad-all" style="flex:none">One link for everyone</button></div>
+  <div class="fb" id="fb-ad"></div><div id="ad-list"></div></section>
+ <section class="card full adm"><h2>☁️ Google Drive sync</h2>
+  <div class="empty">Keeps your trip in your own Google Drive folder, so every device you connect shows the same data.</div>
+  <div class="row"><div style="flex:2 1 240px"><label>Web app URL</label><input id="sy-url" placeholder="https://script.google.com/macros/s/…/exec"></div><div><label>Access code</label><input id="sy-code" type="password" autocomplete="off"></div><button class="btn" id="sy-conn" style="flex:none;align-self:end">Connect</button></div>
+  <div class="fb" id="sy-st"></div>
+  <div id="sy-on" hidden><div class="row"><button class="btn ghost sm" id="sy-now">Sync now</button><button class="btn ghost sm adm" id="sy-load">Load from Drive</button><button class="btn ghost sm adm" id="sy-over">Overwrite Drive</button><button class="btn ghost sm" id="sy-off">Disconnect</button><button class="btn sm adm" id="sy-wipe" style="background:var(--bad)">Remove all data…</button></div></div>
+  <details class="adm" style="margin-top:12px"><summary><b>How to set it up (about 3 minutes)</b></summary>
+   <ol><li>In Google Drive, create a folder (for example Camp Split Data). Open it and copy the folder ID from the address bar, the text after /folders/.</li>
+   <li>Go to script.google.com, choose New project, delete what is there and paste the script below. Put your folder ID and a secret access code at the top.</li>
+   <li>Choose Deploy, then New deployment, then type Web app. Set Execute as: Me and Who has access: Anyone. Deploy and approve the permissions.</li>
+   <li>Copy the Web app URL (it ends with /exec), paste it above with your access code and press Connect. Do the same on any other device.</li></ol>
+   <textarea id="sy-src" readonly rows="10" style="font:12px monospace">const FOLDER_ID = 'PASTE_YOUR_FOLDER_ID';
+const ADMIN_CODE = 'CHOOSE_AN_ADMIN_CODE'; // 12 or more characters. Keep it secret.
+const FILE = 'camp-split-data.json';
+const SECS = ['settings', 'friends', 'barakah', 'expenses', 'summary', 'xfers', 'pays'];
+let S;
+const jd=p=&gt;p.joinDate||S.trip.start||'';
+const part=e=&gt;(e.split||S.people.map(p=&gt;p.id)).filter(i=&gt;{const p=S.people.find(x=&gt;x.id===i);return p&amp;&amp;jd(p)&lt;=(e.date||S.trip.start||'')});
+function calc(){
+ const P=S.people,n=P.length,r={};P.forEach(p=&gt;r[p.id]={paid:0,in:0,share:0,allow:0,sent:0,recv:0});
+ let total=0,kExp=0,kIn=0,kPay=0;const cat={};
+ S.expenses.forEach(e=&gt;{total+=e.amt;cat[e.cat]=(cat[e.cat]||0)+e.amt;if(r[e.by])r[e.by].paid+=e.amt;else kExp+=e.amt;
+  const ids=part(e).filter(i=&gt;r[i]);if(!ids.length)return;ids.forEach(i=&gt;r[i].share+=e.amt/ids.length)});
+ (S.contribs||[]).forEach(x=&gt;{if(r[x.who]){r[x.who].paid+=x.amt;r[x.who].in+=x.amt;kIn+=x.amt}});
+ const cars=P.filter(p=&gt;p.car);const per=Number(S.trip.clean)||0,cleanTotal=cars.length*per;
+ cars.forEach(p=&gt;r[p.id].allow=per);
+ if(n&amp;&amp;cleanTotal)P.forEach(p=&gt;r[p.id].share+=cleanTotal/n);
+ S.payments.forEach(x=&gt;{if(r[x.from])r[x.from].sent+=x.amt;if(r[x.to])r[x.to].recv+=x.amt;if(x.to==='kitty')kPay-=x.amt;if(x.from==='kitty')kPay+=x.amt});
+ P.forEach(p=&gt;{const q=r[p.id];q.net=q.paid+q.allow+q.sent-q.recv-q.share});
+ const cr=P.map(p=&gt;({id:p.id,v:r[p.id].net})).filter(x=&gt;x.v&gt;0.005).sort((a,b)=&gt;b.v-a.v);
+ const db=P.map(p=&gt;({id:p.id,v:-r[p.id].net})).filter(x=&gt;x.v&gt;0.005).sort((a,b)=&gt;b.v-a.v);
+ const kCash=kIn-kExp-kPay;if(kCash&gt;0.005)db.push({id:'kitty',v:kCash});else if(kCash&lt;-0.005)cr.push({id:'kitty',v:-kCash});db.sort((a,b)=&gt;b.v-a.v);cr.sort((a,b)=&gt;b.v-a.v);
+ const tx=[];let i=0,j=0;
+ while(i&lt;db.length&amp;&amp;j&lt;cr.length){const a=Math.min(db[i].v,cr[j].v);tx.push({from:db[i].id,to:cr[j].id,amt:a});db[i].v-=a;cr[j].v-=a;if(db[i].v&lt;0.005)i++;if(cr[j].v&lt;0.005)j++}
+ return{r,total,cat,cars:cars.length,cleanTotal,tx,n,kCash,kIn,kExp}
+}
+
+function findFile_() { const it = DriveApp.getFolderById(FOLDER_ID).getFilesByName(FILE); return it.hasNext() ? it.next() : null; }
+function out_(o) { return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON); }
+function users_() { return JSON.parse(PropertiesService.getScriptProperties().getProperty('users') || '[]'); }
+function saveUsers_(u) { PropertiesService.getScriptProperties().setProperty('users', JSON.stringify(u)); }
+function same_(a, b) { a = String(a); b = String(b); let d = a.length ^ b.length; for (let i = 0; i &lt; Math.max(a.length, b.length); i++) d |= (a.charCodeAt(i) || 0) ^ (b.charCodeAt(i) || 0); return d === 0; }
+function cleanShow_(s) { return SECS.filter(k =&gt; Array.isArray(s) &amp;&amp; s.indexOf(k) &gt;= 0); }
+// Viewers never receive anything they are not allowed to see: the server filters it here.
+function viewOf_(json, show) {
+  const d = Object.assign({ people: [], expenses: [], payments: [], contribs: [] }, JSON.parse(json));
+  d.trip = d.trip || {}; S = d;
+  const has = k =&gt; show.indexOf(k) &gt;= 0, c = calc();
+  if (!has('summary')) { c.r = {}; c.total = 0; c.cat = {}; c.cars = 0; c.cleanTotal = 0; c.n = 0; }
+  if (!has('xfers')) c.tx = [];
+  if (!has('summary') &amp;&amp; !has('barakah')) { c.kIn = 0; c.kExp = 0; c.kCash = 0; }
+  const trip = { name: d.trip.name, emoji: d.trip.emoji, cur: d.trip.cur, img: d.trip.img, start: d.trip.start };
+  if (has('settings')) trip.clean = d.trip.clean;
+  return { trip: trip, people: show.length ? d.people : [], expenses: has('expenses') ? d.expenses : [], payments: has('pays') ? d.payments : [], contribs: has('barakah') ? d.contribs : [], _show: show, _calc: c };
+}
+function doGet() { return out_({ ok: true, msg: 'Camp Split sync is running' }); }
+function doPost(e) {
+  if (ADMIN_CODE.length &lt; 12 || ADMIN_CODE === 'CHOOSE_AN_ADMIN_CODE') return out_({ ok: false, error: 'set a stronger ADMIN_CODE in the script (12+ characters)' });
+  let r;
+  try { r = JSON.parse(e.postData.contents); } catch (x) { return out_({ ok: false, error: 'bad request' }); }
+  const code = String(r.code || '');
+  const user = users_().find(x =&gt; same_(x.code, code));
+  const role = same_(code, ADMIN_CODE) ? 'admin' : (user ? 'viewer' : null);
+  if (!role) { Utilities.sleep(1500); return out_({ ok: false, error: 'wrong access code' }); }
+  if (r.action !== 'read' &amp;&amp; r.action !== 'stamp' &amp;&amp; role !== 'admin') return out_({ ok: false, error: 'view-only code cannot change data' });
+  if (r.action === 'stamp') { const f0 = findFile_(); return out_({ ok: true, updated: Math.max(f0 ? f0.getLastUpdated().getTime() : 0, role === 'viewer' ? (user.ts || 0) : 0), role: role }); }
+  const lock = LockService.getScriptLock(); lock.waitLock(15000);
+  try {
+    const f = findFile_(), upd = f ? f.getLastUpdated().getTime() : 0;
+    if (r.action === 'read') {
+      if (role === 'admin') return out_({ ok: true, data: f ? f.getBlob().getDataAsString() : null, updated: upd, role: role });
+      const show = Array.isArray(user.show) ? cleanShow_(user.show) : SECS;
+      return out_({ ok: true, data: f ? JSON.stringify(viewOf_(f.getBlob().getDataAsString(), show)) : null, updated: Math.max(upd, user.ts || 0), role: role });
+    }
+    if (r.action === 'write') {
+      let ok = typeof r.data === 'string' &amp;&amp; r.data.length &lt; 2000000;
+      if (ok) { try { ok = Array.isArray(JSON.parse(r.data).people); } catch (x) { ok = false; } }
+      if (!ok) return out_({ ok: false, error: 'invalid data' });
+      if (f) f.setContent(r.data); else DriveApp.getFolderById(FOLDER_ID).createFile(FILE, r.data, 'application/json');
+      return out_({ ok: true, updated: findFile_().getLastUpdated().getTime() });
+    }
+    if (r.action === 'wipe') { if (f) f.setTrashed(true); return out_({ ok: true }); }
+    if (r.action === 'users_list') return out_({ ok: true, users: users_() });
+    if (r.action === 'users_add') { const d = r.data || {}, u = users_(); u.push({ id: Utilities.getUuid().slice(0, 8), name: String(d.name || '').slice(0, 40), code: Utilities.getUuid().replace(/-/g, ''), show: Array.isArray(d.show) ? cleanShow_(d.show) : SECS, ts: Date.now() }); saveUsers_(u); return out_({ ok: true, users: u }); }
+    if (r.action === 'users_set') { const d = r.data || {}, u = users_(); u.forEach(x =&gt; { if (x.id === d.id) { x.show = cleanShow_(d.show); x.ts = Date.now(); } }); saveUsers_(u); return out_({ ok: true, users: u }); }
+    if (r.action === 'users_remove') { const u = users_().filter(x =&gt; x.id !== r.data); saveUsers_(u); return out_({ ok: true, users: u }); }
+    return out_({ ok: false, error: 'unknown action' });
+  } finally { lock.releaseLock(); }
+}
+</textarea>
+   <button class="btn ghost sm" id="sy-copy" style="margin-top:8px">Copy script</button></details></section>
+</div></div>
+<script>
+if(top!==self){document.documentElement.innerHTML='';throw 0}
+const $=s=>document.querySelector(s),uid=()=>Math.random().toString(36).slice(2,9);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const KEY='campsplit-v1',THEMES=[['forest','#2f8f5b'],['ocean','#1d7fc4'],['sunset','#e0603a'],['lavender','#7a55d6'],['midnight','#1a2230']];
+const blank=()=>({trip:{name:'Camp Split',emoji:'🏕️',img:'',cur:'$',clean:15},people:[],expenses:[],payments:[],contribs:[],theme:''});
+const sid=v=>String(v==null?'':v).replace(/[^\w-]/g,'').slice(0,24),num=v=>Number.isFinite(+v)?+v:0,dt=v=>/^\d{4}-\d\d-\d\d$/.test(v)?v:'',arr=v=>Array.isArray(v)?v:[];
+function norm(o){o=o&&typeof o==='object'?o:{};const b=blank(),t=Object.assign(b.trip,o.trip),n=Object.assign(b,o);
+ n.trip=Object.assign(t,{name:String(t.name).slice(0,60),emoji:String(t.emoji).slice(0,4),cur:String(t.cur).slice(0,3),clean:num(t.clean),start:dt(t.start),img:/^data:image\/(jpeg|png|webp|gif);base64,[A-Za-z0-9+\/=]+$/.test(t.img)?t.img:''});
+ n.people=arr(o.people).map(p=>({id:sid(p.id),name:String(p.name).slice(0,40),car:!!p.car,joinDate:dt(p.joinDate)}));
+ n.expenses=arr(o.expenses).map(e=>({id:sid(e.id),desc:String(e.desc).slice(0,120),amt:num(e.amt),by:sid(e.by),date:dt(e.date),cat:['food','rent','fuel','other'].includes(e.cat)?e.cat:'other',split:Array.isArray(e.split)?e.split.map(sid):null}));
+ n.payments=arr(o.payments).map(x=>({id:sid(x.id),from:sid(x.from),to:sid(x.to),amt:num(x.amt)}));
+ n.contribs=arr(o.contribs).map(x=>({id:sid(x.id),who:sid(x.who),amt:num(x.amt),date:dt(x.date)}));
+ n.theme=THEMES.some(q=>q[0]===o.theme)?o.theme:'';
+ if(o.lock&&typeof o.lock.salt==='string'&&typeof o.lock.hash==='string')n.lock={salt:o.lock.salt,hash:o.lock.hash};else delete n.lock;
+ if(!(o._calc&&typeof o._calc==='object'))delete n._calc;if(!Array.isArray(o._show))delete n._show;return n}
+let S=blank(),splitSel=null,editId=null;
+let had=false;try{const r=localStorage.getItem(KEY);if(r){had=true;S=norm(JSON.parse(r))}}catch(e){had=true}
+const idb=()=>new Promise((res,rej)=>{const q=indexedDB.open('campsplit',1);q.onupgradeneeded=()=>q.result.createObjectStore('kv');q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error)});
+const idbSet=async v=>{try{const d=await idb();d.transaction('kv','readwrite').objectStore('kv').put(v,'state')}catch(e){}};
+const idbGet=()=>idb().then(d=>new Promise(r=>{const q=d.transaction('kv').objectStore('kv').get('state');q.onsuccess=()=>r(q.result);q.onerror=()=>r()})).catch(()=>undefined);
+try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+const save=()=>{const j=JSON.stringify(S);try{localStorage.setItem(KEY,j)}catch(e){}idbSet(j);schedSync()};
+const m=n=>(n<0?'-':'')+S.trip.cur+Math.abs(n).toFixed(2);
+const nm=id=>id==='kitty'?'Group Barakah':(S.people.find(p=>p.id===id)||{name:'?'}).name;
+const fb=(id,t,c)=>{const e=$(id);e.textContent=t;e.className='fb '+(c||'');if(t)setTimeout(()=>{if(e.textContent===t)e.textContent=''},4000)};
+
+const today=()=>{const d=new Date();return new Date(d-d.getTimezoneOffset()*6e4).toISOString().slice(0,10)};
+const jd=p=>p.joinDate||S.trip.start||'';
+const part=e=>(e.split||S.people.map(p=>p.id)).filter(i=>{const p=S.people.find(x=>x.id===i);return p&&jd(p)<=(e.date||S.trip.start||'')});
+const fd=d=>{try{return new Date(d+'T00:00').toLocaleDateString(undefined,{day:'numeric',month:'short'})}catch(e){return d}};
+function calc(){if(S._calc)return S._calc;
+ const P=S.people,n=P.length,r={};P.forEach(p=>r[p.id]={paid:0,in:0,share:0,allow:0,sent:0,recv:0});
+ let total=0,kExp=0,kIn=0,kPay=0;const cat={};
+ S.expenses.forEach(e=>{total+=e.amt;cat[e.cat]=(cat[e.cat]||0)+e.amt;if(r[e.by])r[e.by].paid+=e.amt;else kExp+=e.amt;
+  const ids=part(e).filter(i=>r[i]);if(!ids.length)return;ids.forEach(i=>r[i].share+=e.amt/ids.length)});
+ (S.contribs||[]).forEach(x=>{if(r[x.who]){r[x.who].paid+=x.amt;r[x.who].in+=x.amt;kIn+=x.amt}});
+ const cars=P.filter(p=>p.car);const per=Number(S.trip.clean)||0,cleanTotal=cars.length*per;
+ cars.forEach(p=>r[p.id].allow=per);
+ if(n&&cleanTotal)P.forEach(p=>r[p.id].share+=cleanTotal/n);
+ S.payments.forEach(x=>{if(r[x.from])r[x.from].sent+=x.amt;if(r[x.to])r[x.to].recv+=x.amt;if(x.to==='kitty')kPay-=x.amt;if(x.from==='kitty')kPay+=x.amt});
+ P.forEach(p=>{const q=r[p.id];q.net=q.paid+q.allow+q.sent-q.recv-q.share});
+ const cr=P.map(p=>({id:p.id,v:r[p.id].net})).filter(x=>x.v>0.005).sort((a,b)=>b.v-a.v);
+ const db=P.map(p=>({id:p.id,v:-r[p.id].net})).filter(x=>x.v>0.005).sort((a,b)=>b.v-a.v);
+ const kCash=kIn-kExp-kPay;if(kCash>0.005)db.push({id:'kitty',v:kCash});else if(kCash<-0.005)cr.push({id:'kitty',v:-kCash});db.sort((a,b)=>b.v-a.v);cr.sort((a,b)=>b.v-a.v);
+ const tx=[];let i=0,j=0;
+ while(i<db.length&&j<cr.length){const a=Math.min(db[i].v,cr[j].v);tx.push({from:db[i].id,to:cr[j].id,amt:a});db[i].v-=a;cr[j].v-=a;if(db[i].v<0.005)i++;if(cr[j].v<0.005)j++}
+ return{r,total,cat,cars:cars.length,cleanTotal,tx,n,kCash,kIn,kExp}
+}
+
+let iconKey='';
+function setIcon(){const t=S.trip,k=(t.img||t.emoji)+'|'+S.theme;if(k===iconKey)return;iconKey=k;
+ const cs=getComputedStyle(document.documentElement),c=document.createElement('canvas');c.width=c.height=180;const x=c.getContext('2d');
+ const g=x.createLinearGradient(0,0,180,180);g.addColorStop(0,cs.getPropertyValue('--acc').trim()||'#2f8f5b');g.addColorStop(1,cs.getPropertyValue('--acc2').trim()||'#e9a23b');
+ x.beginPath();x.roundRect?x.roundRect(0,0,180,180,52):x.rect(0,0,180,180);x.clip();x.fillStyle=g;x.fillRect(0,0,180,180);
+ const put=()=>['icon','apple-touch-icon'].forEach(r=>{let l=document.querySelector('link[rel="'+r+'"]');if(!l){l=document.createElement('link');l.rel=r;document.head.appendChild(l)}l.href=c.toDataURL('image/png')});
+ if(t.img){const i=new Image();i.onload=()=>{const m=Math.min(i.width,i.height);x.drawImage(i,(i.width-m)/2,(i.height-m)/2,m,m,0,0,180,180);put()};i.src=t.img}
+ else{x.font='100px "Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif';x.textAlign='center';x.textBaseline='middle';x.fillText(t.emoji||'🏕️',90,98);put()}}
+function render(){document.querySelectorAll('[data-sec]').forEach(e=>{e.hidden=!!S._show&&!S._show.includes(e.dataset.sec)});
+ document.documentElement.dataset.theme=S.theme||'';if(!S.theme)delete document.documentElement.dataset.theme;
+ const t=S.trip;$('#tname').textContent=t.name||'Camp Split';document.title=t.name||'Camp Split';
+ $('#logo').innerHTML=t.img?'<img alt="" src="'+esc(t.img)+'">':esc(t.emoji||'🏕️');setIcon();
+ $('#themes').innerHTML=THEMES.map(([k,c])=>'<button data-th="'+k+'" title="'+k+'" class="'+(S.theme===k?'on':'')+'" style="background:'+c+'"></button>').join('');
+ const c=calc();
+ $('#people').innerHTML=S.people.length?S.people.map(p=>'<span class="chip '+(p.car?'car':'')+'">'+(p.car?'🚗 ':'')+esc(p.name)+(jd(p)>S.trip.start?' <small>· joined '+fd(jd(p))+'</small>':'')+'<button class="adm" data-jd="'+p.id+'" title="Change join day">📅</button><button class="adm" data-tcar="'+p.id+'" title="Toggle car">🚗</button><button class="adm" data-dp="'+p.id+'" title="Remove">✕</button></span>').join(''):'<div class="empty">Add the friends who are coming.</div>';
+ $('#e-by').innerHTML='<option value="kitty">💰 Group Barakah (cash in hand)</option>'+S.people.map(p=>'<option value="'+p.id+'">'+esc(p.name)+'</option>').join('');
+ $('#e-split').innerHTML=S.people.map(p=>'<label><input type="checkbox" data-sp="'+p.id+'" '+(!splitSel||splitSel.has(p.id)?'checked':'')+'>'+esc(p.name)+'</label>').join('')||'<span class="empty">Add friends first</span>';
+ const ic={food:'🍖',rent:'⛺',fuel:'⛽',other:'🧩'};
+ $('#exps').innerHTML=S.expenses.length?S.expenses.slice().reverse().map(e=>'<div class="item"><div class="m"><b>'+ic[e.cat]+' '+esc(e.desc)+'</b><small>Paid by '+esc(nm(e.by))+' · '+fd(e.date||S.trip.start)+' · shared by '+part(e).length+'</small></div><div class="amt">'+m(e.amt)+'</div><button class="btn ghost sm adm" data-ee="'+e.id+'">Edit</button><button class="btn ghost sm adm" data-de="'+e.id+'">✕</button></div>').join(''):'<div class="empty">No expenses yet. Keep adding as the trip goes.</div>';
+ $('#stats').innerHTML=[['Total shared',m(c.total+c.cleanTotal)],['Expenses',m(c.total)],['Fuel',m(c.cat.fuel||0)],['Car cleaning ('+c.cars+' car'+(c.cars===1?'':'s')+')',m(c.cleanTotal)],['Barakah cash in hand',m(c.kCash)],['Average per person',c.n?m((c.total+c.cleanTotal)/c.n):m(0)]].map(x=>'<div class="stat"><span>'+x[0]+'</span><b>'+x[1]+'</b></div>').join('');
+ $('#tbl').innerHTML=c.n?'<tr><th>Person</th><th>In Barakah</th><th>Paid out of pocket</th><th>Cleaning in</th><th>Fair share</th><th>Settled</th><th>Balance</th></tr>'+S.people.map(p=>{const q=c.r[p.id],st=q.sent-q.recv;return'<tr><td>'+(p.car?'🚗 ':'')+esc(p.name)+'</td><td>'+m(q.in)+'</td><td>'+m(q.paid-q.in)+'</td><td>'+m(q.allow)+'</td><td>'+m(q.share)+'</td><td>'+m(st)+'</td><td class="amt '+(q.net>0.005?'pos':q.net<-0.005?'neg':'')+'">'+(q.net>0.005?'gets '+m(q.net):q.net<-0.005?'owes '+m(-q.net):'all square ✓')+'</td></tr>'}).join(''):'';
+ $('#xfers').innerHTML=c.tx.length?c.tx.map((x,i)=>'<div class="xfer"><div class="m"><b>'+esc(nm(x.from))+'</b> → <b>'+esc(nm(x.to))+'</b></div><div class="amt">'+m(x.amt)+'</div><button class="btn sm adm" data-pay="'+i+'">Mark paid</button></div>').join(''):'<div class="empty">'+(S.expenses.length?'Everyone is square 🎉':'Add expenses to see who pays whom.')+'</div>';
+ $('#pays').innerHTML=S.payments.length?S.payments.map(x=>'<div class="item"><div class="m">'+esc(nm(x.from))+' paid '+esc(nm(x.to))+'</div><div class="amt pos">'+m(x.amt)+'</div><button class="btn ghost sm adm" data-up="'+x.id+'">Undo</button></div>').join(''):'<div class="empty">Nothing marked as paid yet.</div>';
+ const cw=$('#c-who').value;$('#c-who').innerHTML=S.people.map(p=>'<option value="'+p.id+'">'+esc(p.name)+'</option>').join('');if(cw)$('#c-who').value=cw;
+ $('#kstats').innerHTML=[['Collected',m(c.kIn)],['Spent from Barakah',m(c.kExp)],['Cash in hand',m(c.kCash)]].map(x=>'<div class="stat"><span>'+x[0]+'</span><b class="'+(x[0]==='Cash in hand'&&c.kCash<-0.005?'neg':'')+'">'+x[1]+'</b></div>').join('');
+ $('#contribs').innerHTML=S.contribs.length?S.contribs.slice().reverse().map(x=>'<div class="item"><div class="m"><b>'+esc(nm(x.who))+'</b><small>'+fd(x.date)+'</small></div><div class="amt pos">+'+m(x.amt)+'</div><button class="btn ghost sm adm" data-dc="'+x.id+'">✕</button></div>').join(''):'<div class="empty">No money collected yet.</div>';
+ $('#lockbtn').textContent=S.lock?'🔒':'🔓';$('#lockbtn').title=S.lock?'Lock / change PIN':'Set a PIN';updBk();window._tx=c.tx;save();
+}
+
+$('#p-add').onclick=()=>{const v=$('#p-name').value.trim();
+ if(!v)return fb('#fb-p','Please enter a name.','err');
+ if(S.people.some(p=>p.name.toLowerCase()===v.toLowerCase()))return fb('#fb-p',v+' is already on the list.','err');
+ S.people.push({id:uid(),name:v,car:$('#p-car').checked,joinDate:$('#p-date').value||T.start});$('#p-name').value='';$('#p-car').checked=false;fb('#fb-p',v+' added.','ok');render()};
+$('#p-name').onkeydown=e=>{if(e.key==='Enter')$('#p-add').click()};
+$('#e-add').onclick=()=>{const d=$('#e-desc').value.trim(),a=parseFloat($('#e-amt').value),by=$('#e-by').value;
+ if(!S.people.length)return fb('#fb-e','Add your friends first.','err');
+ if(!d)return fb('#fb-e','Describe the expense.','err');
+ if(!(a>0))return fb('#fb-e','Enter an amount above zero.','err');
+ const ids=splitSel?[...splitSel].filter(i=>S.people.some(p=>p.id===i)):null;
+ if(ids&&!ids.length)return fb('#fb-e','Pick at least one person to share it.','err');
+ if(by==='kitty'){const old=S.expenses.find(x=>x.id===editId),av=calc().kCash+(old&&old.by==='kitty'?old.amt:0);if(a>av+0.005)return fb('#fb-e','Barakah only has '+m(av)+'. Add collected money first, or choose who paid.','err')}
+ const e={id:editId||uid(),desc:d,amt:a,by,date:$('#e-date').value||today(),cat:$('#e-cat').value,split:ids&&ids.length<S.people.length?ids:null};
+ if(editId){S.expenses=S.expenses.map(x=>x.id===editId?e:x)}else S.expenses.push(e);
+ fb('#fb-e',editId?'Expense updated.':'Expense added.','ok');editId=null;splitSel=null;
+ $('#e-desc').value='';$('#e-amt').value='';$('#e-add').textContent='Add expense';$('#e-cancel').hidden=true;render()};
+$('#c-add').onclick=()=>{const w=$('#c-who').value,a=parseFloat($('#c-amt').value);if(!w)return fb('#fb-c','Add your friends first.','err');if(!(a>0))return fb('#fb-c','Enter an amount above zero.','err');S.contribs.push({id:uid(),who:w,amt:a,date:$('#c-date').value||today()});$('#c-amt').value='';fb('#fb-c',m(a)+' added to Barakah.','ok');render()};
+$('#e-cancel').onclick=()=>{editId=null;splitSel=null;$('#e-desc').value='';$('#e-amt').value='';$('#e-add').textContent='Add expense';$('#e-cancel').hidden=true;render()};
+
+document.addEventListener('click',ev=>{const b=ev.target.closest('button');if(!b)return;const d=b.dataset;
+ if(d.th){S.theme=d.th;render()}
+ if(d.dp){const p=S.people.find(x=>x.id===d.dp);if(S.expenses.some(e=>e.by===d.dp)||S.contribs.some(x=>x.who===d.dp)||S.payments.some(x=>x.from===d.dp||x.to===d.dp))return fb('#fb-p',p.name+' has expenses or payments, so can’t be removed.','err');
+  S.people=S.people.filter(x=>x.id!==d.dp);S.expenses.forEach(e=>{if(e.split){e.split=e.split.filter(i=>i!==d.dp);if(!e.split.length)e.split=null}});render()}
+ if(d.tcar){const p=S.people.find(x=>x.id===d.tcar);p.car=!p.car;render()}
+ if(d.jd){const p=S.people.find(x=>x.id===d.jd);const v=prompt('Joining date for '+p.name+' (YYYY-MM-DD)',jd(p));if(v&&/^\d{4}-\d\d-\d\d$/.test(v)){p.joinDate=v;render()}else if(v)fb('#fb-p','Use the format YYYY-MM-DD.','err')}
+ if(d.de){S.expenses=S.expenses.filter(x=>x.id!==d.de);render()}
+ if(d.ee){const e=S.expenses.find(x=>x.id===d.ee);editId=e.id;splitSel=e.split?new Set(e.split):null;
+  $('#e-desc').value=e.desc;$('#e-amt').value=e.amt;$('#e-date').value=e.date||T.start;$('#e-cat').value=e.cat;render();$('#e-by').value=e.by;
+  $('#e-add').textContent='Save changes';$('#e-cancel').hidden=false;$('#e-desc').scrollIntoView({behavior:'smooth',block:'center'})}
+ if(d.pay){const x=window._tx[+d.pay];if(x){S.payments.push({id:uid(),from:x.from,to:x.to,amt:Math.round(x.amt*100)/100});fb('#fb-pay','Marked as paid.','ok');render()}}
+ if(d.dc){S.contribs=S.contribs.filter(x=>x.id!==d.dc);render()}
+ if(d.up){S.payments=S.payments.filter(x=>x.id!==d.up);render()}
+});
+document.addEventListener('change',ev=>{const i=ev.target.dataset&&ev.target.dataset.sp;if(!i)return;
+ if(!splitSel)splitSel=new Set(S.people.map(p=>p.id));ev.target.checked?splitSel.add(i):splitSel.delete(i)});
+
+const T=S.trip;if(!T.start)T.start=today();
+const bind=(id,k,f)=>{const e=$(id);e.value=T[k];e.oninput=()=>{T[k]=f?f(e.value):e.value;render()}};
+bind('#s-name','name');bind('#s-start','start');$('#e-date').value=today();$('#p-date').value=T.start;$('#c-date').value=today();bind('#s-emoji','emoji');bind('#s-cur','cur');bind('#s-clean','clean',v=>v===''?0:parseFloat(v));
+$('#s-clean').onchange=()=>{const v=parseFloat($('#s-clean').value);fb('#fb-set',v>=10&&v<=15?'Cleaning allowance set.':'Heads up: cleaning is usually $10 to $15 per car.',v>=10&&v<=15?'ok':'err')};
+$('#logo').onclick=()=>$('#s-emoji').focus();
+$('#up').onclick=()=>$('#f-img').click();
+$('#f-img').onchange=e=>{const f=e.target.files[0];if(!f)return;const img=new Image(),u=URL.createObjectURL(f);
+ img.onload=()=>{const c=document.createElement('canvas');c.width=c.height=160;const x=c.getContext('2d'),s=Math.min(img.width,img.height);x.drawImage(img,(img.width-s)/2,(img.height-s)/2,s,s,0,0,160,160);T.img=c.toDataURL('image/jpeg',.85);fb('#fb-set','Logo updated.','ok');render()};img.src=u};
+$('#rmimg').onclick=()=>{T.img='';render()};
+$('#exp').onclick=()=>{S.lastBackup=Date.now();render();const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(S)],{type:'application/json'}));a.download='camp-split-backup.json';a.click()};
+$('#imp').onclick=()=>$('#f-imp').click();
+$('#f-imp').onchange=e=>{const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{try{S=norm(JSON.parse(r.result));location.reload=0;Object.assign(T,S.trip);S.trip=T;$('#s-name').value=T.name;$('#s-emoji').value=T.emoji;$('#s-cur').value=T.cur;$('#s-clean').value=T.clean;fb('#fb-set','Backup restored.','ok');render()}catch(x){fb('#fb-set','That file couldn’t be read.','err')}};r.readAsText(f)};
+$('#reset').onclick=()=>{if(!confirm('Start a new trip? This clears friends, expenses and payments (name, logo and theme are kept).'))return;S.people=[];S.expenses=[];S.payments=[];S.contribs=[];splitSel=null;editId=null;render()};
+const hex=b=>[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('');
+async function hashPin(pin,salt){const k=await crypto.subtle.importKey('raw',new TextEncoder().encode(pin),'PBKDF2',false,['deriveBits']);return hex(await crypto.subtle.deriveBits({name:'PBKDF2',salt:new TextEncoder().encode(salt),iterations:150000,hash:'SHA-256'},k,256))}
+let lockMode='unlock',fails=0,hid=0;const wrap=()=>document.querySelector('.wrap');
+function showLock(mode){lockMode=mode;if(S.theme)document.documentElement.dataset.theme=S.theme;$('#lock').hidden=false;wrap().style.display='none';$('#lk-t').textContent=mode==='set'?'Create a PIN':'Enter PIN';$('#lk-pin2').hidden=mode!=='set';$('#lk-x').hidden=mode!=='set';$('#lk-go').textContent=mode==='set'?'Save PIN':'Unlock';$('#lk-pin').value=$('#lk-pin2').value='';$('#lk-pin').focus()}
+function hideLock(){$('#lock').hidden=true;wrap().style.display='';render();tryRestore(true)}
+$('#lk-x').onclick=hideLock;
+$('#lk-pin').onkeydown=$('#lk-pin2').onkeydown=e=>{if(e.key==='Enter')$('#lk-go').click()};
+$('#lk-go').onclick=async()=>{const p=$('#lk-pin').value;
+ if(!window.crypto||!crypto.subtle)return fb('#fb-lk','PIN lock needs a secure (https) page.','err');
+ if(lockMode==='set'){if(!/^\d{4,12}$/.test(p))return fb('#fb-lk','Use 4 to 12 digits.','err');if(p!==$('#lk-pin2').value)return fb('#fb-lk','The PINs don’t match.','err');const salt=uid()+uid();S.lock={salt,hash:await hashPin(p,salt)};save();hideLock();return}
+ if(await hashPin(p,S.lock.salt)===S.lock.hash){fails=0;hideLock()}else{fails++;fb('#fb-lk','Wrong PIN.','err');$('#lk-pin').value='';if(fails>=3){$('#lk-go').disabled=true;setTimeout(()=>{$('#lk-go').disabled=false},Math.min(30,fails*5)*1000)}}};
+$('#lockbtn').onclick=async()=>{if(!S.lock)return showLock('set');
+ const a=(prompt('Type LOCK to lock now, CHANGE to set a new PIN, or REMOVE to turn the PIN off.','LOCK')||'').trim().toUpperCase();
+ if(a==='LOCK')return showLock('unlock');
+ if(a==='CHANGE'||a==='REMOVE'){const p=prompt('Enter your current PIN');if(p===null)return;if(await hashPin(p,S.lock.salt)!==S.lock.hash)return alert('Wrong PIN.');if(a==='REMOVE'){delete S.lock;save();render()}else showLock('set')}};
+document.addEventListener('visibilitychange',()=>{if(document.hidden)hid=Date.now();else if(S.lock&&hid&&Date.now()-hid>3e5&&$('#lock').hidden)showLock('unlock')});
+function updBk(){const e=$('#bk-msg');if(!e)return;const has=S.expenses.length||S.contribs.length,t=S.lastBackup,old=!t||Date.now()-t>864e5;e.innerHTML=(t?'Last backup: '+new Date(t).toLocaleString():'No backup yet.')+(has&&old?' <b class="neg">Back up now so a reset can’t erase your trip.</b>':'')}
+const backupFile=()=>new File([JSON.stringify(S)],'camp-split-backup-'+today()+'.json',{type:'application/json'});
+$('#bk-share').onclick=async()=>{const f=backupFile();
+ try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:'Camp Split backup'});S.lastBackup=Date.now();render();return fb('#fb-bk','Backup sent.','ok')}}catch(e){if(e.name==='AbortError')return}
+ const a=document.createElement('a');a.href=URL.createObjectURL(f);a.download=f.name;a.click();S.lastBackup=Date.now();render();fb('#fb-bk','Backup downloaded. Upload it to Drive or send it on WhatsApp.','ok')};
+async function pack(o){const s=new Blob([JSON.stringify(o)]).stream().pipeThrough(new CompressionStream('gzip'));const b=new Uint8Array(await new Response(s).arrayBuffer());let bin='';b.forEach(x=>bin+=String.fromCharCode(x));return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+async function unpack(t){const bin=atob(t.replace(/-/g,'+').replace(/_/g,'/'));const b=Uint8Array.from(bin,c=>c.charCodeAt(0));const s=new Blob([b]).stream().pipeThrough(new DecompressionStream('gzip'));return JSON.parse(await new Response(s).text())}
+$('#bk-link').onclick=async()=>{try{const d=JSON.parse(JSON.stringify(S));delete d.lock;d.trip.img='';const u=location.href.split('#')[0]+'#restore='+await pack(d);
+ try{await navigator.clipboard.writeText(u)}catch(e){prompt('Copy this link:',u)}
+ S.lastBackup=Date.now();render();fb('#fb-bk','Link copied. Paste it into WhatsApp (message yourself) or a Drive note.','ok')}catch(e){fb('#fb-bk','This browser can’t create the link. Use “Send backup” instead.','err')}};
+async function tryRestore(ok){const h=location.hash;if(!h.startsWith('#restore=')||(S.lock&&!ok)||(cfg&&cfg.role==='viewer'))return false;
+ try{const o=await unpack(h.slice(9));if(!o||!Array.isArray(o.people)||!Array.isArray(o.expenses))throw 0;
+  if(!confirm('Restore the trip saved in this link? It will replace the trip on this device.')){history.replaceState(null,'',location.pathname+location.search);return false}
+  const n=norm(o);if(S.lock)n.lock=S.lock;n.trip.img=S.trip.img||'';
+  localStorage.setItem(KEY,JSON.stringify(n));history.replaceState(null,'',location.pathname+location.search);location.reload();return true}
+ catch(e){alert('That link couldn’t be read.');return false}}
+const CK='campsplit-sync';let cfg=null,busy=false,conflict=false,syncT=0;
+try{cfg=JSON.parse(localStorage.getItem(CK)||'null')}catch(e){}
+const saveCfg=()=>{try{localStorage.setItem(CK,JSON.stringify(cfg))}catch(e){}};
+const st=o=>JSON.stringify(o,(k,v)=>v&&typeof v==='object'&&!Array.isArray(v)?Object.keys(v).sort().reduce((a,x)=>(a[x]=v[x],a),{}):v);
+const payload=(o=S)=>{const d=Object.assign({},o);delete d.lock;delete d.lastBackup;delete d._calc;delete d._show;return st(d)};
+const hs=s=>{let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))|0;return String(h)};
+const hasData=()=>S.people.length||S.expenses.length||S.contribs.length;
+const sst=(t,c)=>{const e=$('#sy-st');if(e){e.textContent=t;e.className='fb '+(c||'')}};
+function upd(){const on=!!cfg,ro=on&&cfg.role==='viewer';document.documentElement.classList.toggle('ro',ro);$('#badge').hidden=!ro;['#s-name','#s-emoji','#s-cur','#s-clean','#s-start'].forEach(s=>$(s).disabled=ro);$('#sy-on').hidden=!on;$('#sy-conn').textContent=on?'Reconnect':'Connect';if(on){$('#sy-url').value=cfg.url;$('#sy-code').value=cfg.code}if(on&&!ro)loadUsers()}
+async function call(action,data){const r=await fetch(cfg.url,{method:'POST',body:JSON.stringify({code:cfg.code,action,data})});return r.json()}
+async function push(){const j=payload(),r=await call('write',j);if(!r.ok)throw new Error(r.error);cfg.syncedAt=r.updated;cfg.h=hs(j);saveCfg()}
+function applyRemote(d,u){const n=norm(JSON.parse(d));if(S.lock)n.lock=S.lock;if(cfg.role==='viewer')n.theme=S.theme;cfg.syncedAt=u;cfg.h=hs(payload(n));saveCfg();if(cfg.role==='viewer'){S=n;Object.assign(T,n.trip);S.trip=T;const ks={'#s-name':'name','#s-emoji':'emoji','#s-cur':'cur','#s-clean':'clean','#s-start':'start'};Object.keys(ks).forEach(i=>{$(i).value=T[ks[i]]??''});render();upd();sst('Live ✓ '+new Date().toLocaleTimeString(),'ok');return}localStorage.setItem(KEY,JSON.stringify(n));location.reload()}
+function schedSync(){if(!cfg||cfg.role==='viewer'||conflict||busy)return;if(hs(payload())===cfg.h)return;clearTimeout(syncT);syncT=setTimeout(sync,800)}
+async function sync(){if(!cfg||busy)return;if(conflict)return sst('Choose “Load from Drive” or “Overwrite Drive” first.','err');
+ busy=true;sst('Syncing…');
+ try{const r=await call('read');if(!r.ok)throw new Error(r.error);const dirty=hs(payload())!==cfg.h;cfg.role=r.role||cfg.role||'admin';if(cfg.role==='viewer'){if(r.data&&r.updated>cfg.syncedAt)return applyRemote(r.data,r.updated);saveCfg();upd();return sst('Up to date ✓ (view-only)','ok')}
+  if(r.data&&r.updated>cfg.syncedAt){if(!dirty)return applyRemote(r.data,r.updated);conflict=true;return sst('⚠️ Drive and this device both have new changes. Choose “Load from Drive” or “Overwrite Drive”.','err')}
+  if(!r.data&&cfg.syncedAt>0){conflict=true;return sst('⚠️ The Drive copy was removed. Choose “Overwrite Drive” to save this device’s trip again.','err')}
+  if(dirty&&(r.data||hasData()))await push();
+  sst('Synced at '+new Date().toLocaleTimeString()+' ✓','ok')
+ }catch(e){if(cfg&&cfg.role==='viewer'&&e&&e.message==='wrong access code'){try{const b=blank();localStorage.setItem(KEY,JSON.stringify(b));await idbSet(JSON.stringify(b));localStorage.removeItem(CK)}catch(x){}return location.reload()}sst('Can’t reach Drive right now. Your data is safe on this device and will sync later.','err')}finally{busy=false;setTimeout(schedSync,300)}}
+$('#sy-conn').onclick=async()=>{const url=$('#sy-url').value.trim(),code=$('#sy-code').value.trim();
+ if(!(url.startsWith('https://script.google.com/')&&url.endsWith('/exec')))return sst('Paste the Web app URL that ends with /exec.','err');
+ if(code.length<8)return sst('Enter your access code.','err');
+ const old=cfg;cfg={url,code,syncedAt:0,h:''};sst('Connecting…');
+ try{const r=await call('read');if(!r.ok)throw new Error(r.error);
+  cfg.role=r.role||'admin';if(r.role==='viewer'&&!r.data){saveCfg();upd();return sst('Connected as view-only ✓ Waiting for the admin to save the trip.','ok')}
+  if(r.data){if(!hasData()||confirm('Your Drive folder already has a saved trip.\n\nOK = load the Drive trip here (replaces this device’s trip)\nCancel = don’t connect yet'))return applyRemote(r.data,r.updated);cfg=old;return sst('Not connected.','err')}
+  if(hasData())await push();saveCfg();upd();sst('Connected ✓ Your trip is saved to Google Drive.','ok')
+ }catch(e){cfg=old;sst('Couldn’t connect ('+(e.message||'check the URL and code')+'). Sync works from your GitHub page, not inside a preview.','err')}};
+$('#sy-now').onclick=sync;
+$('#sy-load').onclick=async()=>{if(!confirm('Replace this device’s trip with the copy saved on Google Drive?'))return;try{const r=await call('read');if(!r.ok)throw new Error(r.error);if(!r.data)return sst('Nothing is saved on Drive yet.','err');applyRemote(r.data,r.updated)}catch(e){sst('Can’t reach Drive: '+(e.message||'try again'),'err')}};
+$('#sy-over').onclick=async()=>{if(!confirm('Replace the copy on Google Drive with this device’s trip?'))return;try{conflict=false;await push();sst('Drive now matches this device ✓','ok')}catch(e){sst('Can’t reach Drive: '+(e.message||'try again'),'err')}};
+$('#sy-off').onclick=()=>{if(!confirm('Disconnect from Google Drive? Your data stays on this device and in Drive.'))return;cfg=null;conflict=false;try{localStorage.removeItem(CK)}catch(e){}$('#sy-url').value=$('#sy-code').value='';upd();sst('Disconnected.')};
+$('#sy-wipe').onclick=async()=>{if(!cfg)return sst('Connect Google Drive first.','err');
+ const c=prompt('To remove all data, type your access code:');if(c===null)return;if(c!==cfg.code)return sst('Wrong access code. Nothing was removed.','err');
+ if(!confirm('⚠️ REMOVE ALL DATA?\n\nThis will delete the trip from your Google Drive folder AND from this device: all friends, expenses, Barakah entries and payments.\n\nThis cannot be undone.\n\nPress OK only if you are sure.'))return;
+ try{const r=await call('wipe');if(!r.ok)throw new Error(r.error)}catch(e){return sst('Couldn’t reach Drive, so nothing was removed.','err')}
+ const b=blank();if(S.lock)b.lock=S.lock;cfg.syncedAt=0;cfg.h=hs(payload(b));saveCfg();localStorage.setItem(KEY,JSON.stringify(b));await idbSet(JSON.stringify(b));location.reload()};
+$('#sy-copy').onclick=async()=>{try{await navigator.clipboard.writeText($('#sy-src').value);sst('Script copied.','ok')}catch(e){$('#sy-src').select()}};
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)sync()});setInterval(()=>{if(!cfg||cfg.role!=='viewer'||document.hidden||busy)return;call('stamp').then(r=>{if(!r.ok||r.updated>cfg.syncedAt)sync()}).catch(()=>{})},4000);
+let users=[];
+const b64=s=>{let b='';new TextEncoder().encode(s).forEach(x=>b+=String.fromCharCode(x));return btoa(b).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
+const SECS=[['settings','Trip settings'],['friends','Friends'],['barakah','Barakah'],['expenses','Expenses'],['summary','Summary'],['xfers','Who pays whom'],['pays','Paid back']];
+const boxes=(id,show)=>'<div class="checks" data-box="'+id+'">'+SECS.map(([k,l])=>'<label><input type="checkbox" data-k="'+k+'" '+(show.includes(k)?'checked':'')+'>'+l+'</label>').join('')+'</div>';
+const picked=id=>[...document.querySelectorAll('[data-box="'+id+'"] input:checked')].map(i=>i.dataset.k);
+function shareLink(code,name){const m=/^https:\/\/script\.google\.com\/macros\/s\/([\w-]+)\/exec$/.exec(cfg.url),base=location.href.split('#')[0];return m?base+'#j='+m[1]+'.'+code:base+'#join='+b64(JSON.stringify({u:cfg.url,c:code,n:name}))}
+$('#ad-def').innerHTML=boxes('new',SECS.map(x=>x[0]));
+function drawUsers(){$('#ad-list').innerHTML=users.length?users.map(u=>'<div class="item" style="flex-wrap:wrap"><div class="m"><b>'+esc(u.name)+'</b><small>View-only</small></div><button class="btn ghost sm" data-ulink="'+esc(u.id)+'">Copy link</button><button class="btn ghost sm" data-urm="'+esc(u.id)+'">Remove</button><div style="flex-basis:100%">'+boxes(esc(u.id),Array.isArray(u.show)?u.show:SECS.map(x=>x[0]))+'</div></div>').join(''):'<div class="empty">No links yet. Tick what people can see, add a name and press Create link.</div>'}
+$('#ad-list').addEventListener('change',async ev=>{const bx=ev.target.closest('[data-box]');if(!bx)return;const id=bx.dataset.box;try{const r=await call('users_set',{id,show:picked(id)});if(!r.ok)throw new Error(r.error);users=r.users;fb('#fb-ad','Saved. Their screen updates within about 30 seconds.','ok')}catch(e){fb('#fb-ad','Couldn’t save: '+(e.message||'try again'),'err');loadUsers()}});
+async function loadUsers(){try{const r=await call('users_list');if(!r.ok)throw new Error(r.error);users=r.users||[];drawUsers()}catch(e){$('#ad-list').innerHTML='<div class="empty">Connect to Google Drive with your admin code to manage users.</div>'}}
+$('#ad-add').onclick=async()=>{const n=$('#ad-name').value.trim();if(!cfg)return fb('#fb-ad','Connect Google Drive first.','err');if(!n)return fb('#fb-ad','Enter a name.','err');
+ try{const r=await call('users_add',{name:n,show:picked('new')});if(!r.ok)throw new Error(r.error);users=r.users;$('#ad-name').value='';drawUsers();fb('#fb-ad','Added. Tap “Copy link” and send it to '+n+' privately.','ok')}catch(e){fb('#fb-ad','Couldn’t add: '+(e.message||'check your connection'),'err')}};
+$('#ad-list').onclick=async ev=>{const b=ev.target.closest('button');if(!b)return;const u=users.find(x=>x.id===(b.dataset.ulink||b.dataset.urm));if(!u)return;
+ if(b.dataset.ulink){const link=shareLink(u.code,u.name);try{await navigator.clipboard.writeText(link)}catch(e){prompt('Copy this link:',link)}return fb('#fb-ad','Link for '+u.name+' copied. Send it to them privately.','ok')}
+ if(b.dataset.urm){if(!confirm('Remove '+u.name+'? Their link stops working straight away and their copy is cleared from their device the next time they open the app.'))return;try{const r=await call('users_remove',u.id);if(!r.ok)throw new Error(r.error);users=r.users;drawUsers();fb('#fb-ad',u.name+' removed.','ok')}catch(e){fb('#fb-ad','Couldn’t remove: '+(e.message||'try again'),'err')}}};
+async function tryJoin(){const h=location.hash;if(!h.startsWith('#join=')&&!h.startsWith('#j='))return false;
+ let j;try{j=h.startsWith('#j=')?(([i,c])=>({u:'https://script.google.com/macros/s/'+String(i).replace(/[^\w-]/g,'')+'/exec',c}))(h.slice(3).split('.')):JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(h.slice(6).replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0))));if(!j.u||!j.c||!/^https:\/\/script\.google\.com\//.test(j.u))throw 0}catch(e){alert('That link couldn’t be read.');return false}
+ const clear=()=>history.replaceState(null,'',location.pathname+location.search);
+ if((hasData()||cfg)&&!confirm('Open '+(j.n?j.n+'’s':'this')+' view-only link? It connects this device in view-only mode and replaces the trip shown here.')){clear();return false}
+ const old=cfg;cfg={url:j.u,code:j.c,syncedAt:0,h:'',role:'viewer'};
+ try{const r=await call('read');if(!r.ok)throw new Error(r.error);clear();cfg.role=r.role||'viewer';
+  if(r.data){applyRemote(r.data,r.updated);return true}
+  saveCfg();upd();render();sst('Connected as view-only ✓ Waiting for the admin to save the trip.','ok');return true}
+ catch(e){cfg=old;clear();alert('This link isn’t valid any more. Ask the admin for a new one.');return false}}
+$('#ad-all').onclick=async()=>{if(!cfg)return fb('#fb-ad','Connect Google Drive first.','err');
+ try{let u=users.find(x=>x.name==='Everyone');if(!u){const r=await call('users_add',{name:'Everyone',show:picked('new')});if(!r.ok)throw new Error(r.error);users=r.users;drawUsers();u=users.find(x=>x.name==='Everyone')}
+  const link=shareLink(u.code,'Everyone');try{await navigator.clipboard.writeText(link)}catch(e){prompt('Copy this link:',link)}
+  fb('#fb-ad','View-only link for everyone copied.','ok')}catch(e){fb('#fb-ad','Couldn’t create it: '+(e.message||'check your connection'),'err')}};
+try{if(localStorage.getItem('campsplit-tv'))document.documentElement.classList.add('tv')}catch(e){}
+$('#tvbtn').onclick=()=>{const on=document.documentElement.classList.toggle('tv');try{localStorage.setItem('campsplit-tv',on?'1':'')}catch(e){}};
+const boot=()=>{tryJoin().then(j=>{if(j)return;return tryRestore(false).then(r=>{if(r)return;if(S.lock)showLock('unlock');else render();upd();setTimeout(sync,600)})})};
+if(had)boot();else idbGet().then(v=>{if(v){try{localStorage.setItem(KEY,v);location.reload();return}catch(e){}}boot()});
+</script></body></html>
